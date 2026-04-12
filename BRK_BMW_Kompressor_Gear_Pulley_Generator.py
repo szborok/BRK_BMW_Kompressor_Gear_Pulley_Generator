@@ -36,10 +36,10 @@ SMALL_PULLEY_DEPTH_COMP = 1.0
 # Rotate so one tooth tip points to +Y
 ALIGN_TOOTH_TO_POSITIVE_Y = True
 
-VERSION = "4.0"
+VERSION = "4.1"
 
-POINTS_PER_TOOTH = 12
-MAX_PROFILE_POINTS = 500
+POINTS_PER_TOOTH = 20
+MAX_PROFILE_POINTS = 900
 
 # Small pulley pitch compression: <1.0 = tighter tooth spacing on low tooth counts.
 SMALL_PULLEY_PITCH_COMP = 0.945
@@ -502,16 +502,29 @@ def run(context):
         # ---- apply selected scale ----
         pts = [(x * profile_scale, y * profile_scale) for x, y in pts]
 
-        # ---- build sketch as polyline contour ----
+        # ---- build sketch as smooth spline contour ----
         sketch = root.sketches.add(root.xYConstructionPlane)
         sketch.name = f"BMW_Kompressor_{tooth_count}T_v{VERSION}"
         sketch_pts = [adsk.core.Point3D.create(mm_to_cm(x), mm_to_cm(y), 0) for x, y in pts]
 
-        lines = sketch.sketchCurves.sketchLines
-        for i in range(len(sketch_pts)):
-            p1 = sketch_pts[i]
-            p2 = sketch_pts[(i + 1) % len(sketch_pts)]
-            lines.addByTwoPoints(p1, p2)
+        try:
+            fit_pts = adsk.core.ObjectCollection.create()
+            for p in sketch_pts:
+                fit_pts.add(p)
+            # Repeat first point to enforce closure for the spline.
+            fit_pts.add(sketch_pts[0])
+            spline = sketch.sketchCurves.sketchFittedSplines.add(fit_pts)
+            try:
+                spline.isClosed = True
+            except Exception:
+                pass
+        except Exception:
+            # Fallback: draw as polyline if spline creation fails.
+            lines = sketch.sketchCurves.sketchLines
+            for i in range(len(sketch_pts)):
+                p1 = sketch_pts[i]
+                p2 = sketch_pts[(i + 1) % len(sketch_pts)]
+                lines.addByTwoPoints(p1, p2)
 
         pr = largest_profile(sketch)
         if pr is None:
