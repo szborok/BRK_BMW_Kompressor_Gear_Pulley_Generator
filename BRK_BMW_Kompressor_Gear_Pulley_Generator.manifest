@@ -3,9 +3,9 @@
 	"type":	"script",
 	"author":	"",
 	"description":	{
-		"":	"BMW Kompressor gear pulley generator v4.1"
+		"":	"BMW Kompressor gear pulley generator v4.2"
 	},
-	"version":	"4.1",
+	"version":	"4.2",
 	"supportedOS":	"mac",
 	"editEnabled":	true,
 	"iconFilename":	"ScriptIcon.svg"

@@ -36,13 +36,13 @@ SMALL_PULLEY_DEPTH_COMP = 1.0
 # Rotate so one tooth tip points to +Y
 ALIGN_TOOTH_TO_POSITIVE_Y = True
 
-VERSION = "4.1"
+VERSION = "4.2"
 
 POINTS_PER_TOOTH = 20
 MAX_PROFILE_POINTS = 900
 
 # Small pulley pitch compression: <1.0 = tighter tooth spacing on low tooth counts.
-SMALL_PULLEY_PITCH_COMP = 0.945
+SMALL_PULLEY_PITCH_COMP = 0.942
 
 # Small pulley tooth width shaping: <1.0 = wider teeth / narrower gaps.
 SMALL_PULLEY_TOOTH_WIDTH_EXP = 0.85
